@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"michiganhackers/class-review-backend/models"
+	"class-review-backend/models"
 )
 
 type IReviewRepository interface {

@@ -1,6 +1,6 @@
 package services
 
-import "michiganhackers/class-review-backend/repositories"
+import "class-review-backend/repositories"
 
 type Services struct {
 	ReviewService IReviewService

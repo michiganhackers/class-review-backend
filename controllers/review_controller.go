@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"class-review-backend/services"
 	"log"
-	"michiganhackers/class-review-backend/services"
 	"net/http"
 	"strconv"
 

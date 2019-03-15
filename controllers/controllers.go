@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"michiganhackers/class-review-backend/services"
+	"class-review-backend/services"
 
 	"github.com/gin-gonic/gin"
 )

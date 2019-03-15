@@ -1,9 +1,9 @@
 package main
 
 import (
-	"michiganhackers/class-review-backend/controllers"
-	"michiganhackers/class-review-backend/repositories"
-	"michiganhackers/class-review-backend/services"
+	"class-review-backend/controllers"
+	"class-review-backend/repositories"
+	"class-review-backend/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

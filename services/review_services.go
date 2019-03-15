@@ -1,8 +1,9 @@
 package services
 
 import (
-	"michiganhackers/class-review-backend/models"
-	"michiganhackers/class-review-backend/repositories"
+	"class-review-backend/repositories"
+
+	"class-review-backend/models"
 )
 
 type IReviewService interface {
