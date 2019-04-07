@@ -1,13 +1,15 @@
 package repositories
 
 type Repositories struct {
-	ReviewRepository IReviewRepository
+    ReviewRepository IReviewRepository
+    CourseRepository ICourseRepository
 
-	// TODO: put database engine here
+    // TODO: put database engine here
 }
 
 func DefaultRepositories() *Repositories {
-	return &Repositories{
-		ReviewRepository: DefaultReviewRepository(),
-	}
+    return &Repositories{
+        ReviewRepository: DefaultReviewRepository(),
+        CourseRepository: DefaultCourseRepository(),
+    }
 }
