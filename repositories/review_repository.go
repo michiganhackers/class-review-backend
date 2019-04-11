@@ -2,6 +2,8 @@ package repositories
 
 import (
 	"class-review-backend/models"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type IReviewRepository interface {
@@ -10,12 +12,14 @@ type IReviewRepository interface {
 
 // Implements IReviewRepository
 type ReviewRepository struct {
-	// TODO: put database engine here.
+	Database *sqlx.DB
 }
 
-func DefaultReviewRepository() *ReviewRepository {
+func DefaultReviewRepository(db *sqlx.DB) *ReviewRepository {
 	// TODO: set up database engine here
-	return &ReviewRepository{}
+	return &ReviewRepository{
+		Database: db,
+	}
 }
 
 func (rr *ReviewRepository) GetReview(id uint64) (*models.Review, error) {

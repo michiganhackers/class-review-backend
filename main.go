@@ -26,7 +26,8 @@ func main() {
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
-	repos := repositories.DefaultRepositories()
+	db := repositories.CreateDB()
+	repos := repositories.DefaultRepositories(db)
 	servs := services.DefaultServices(repos)
 	controllers.DefaultControllers(r, servs)
 

@@ -9,9 +9,9 @@ type Repositories struct {
 	Database         *sqlx.DB
 }
 
-func DefaultRepositories() *Repositories {
+func DefaultRepositories(db *sqlx.DB) *Repositories {
 	return &Repositories{
-		ReviewRepository: DefaultReviewRepository(),
-		Database:         CreateDB(),
+		ReviewRepository: DefaultReviewRepository(db),
+		Database:         db,
 	}
 }
