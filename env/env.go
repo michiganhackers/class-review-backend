@@ -10,16 +10,18 @@ type EnvironmentVariables struct {
 	DBUser     string
 	DBPassword string
 	DBServer   string
+	DBPort     string
 }
 
 func Init() *EnvironmentVariables {
 
-	// set config variables
+	// Get environment variabless
 	environmentVariables := EnvironmentVariables{
 		DBName:     GetEnvironmentVariableByKey("DB_NAME"),
 		DBUser:     GetEnvironmentVariableByKey("DB_USER"),
 		DBPassword: GetEnvironmentVariableByKey("DB_PASSWORD"),
 		DBServer:   GetEnvironmentVariableByKey("DB_SERVER"),
+		DBPort:     GetEnvironmentVariableByKey("DB_PORT"),
 	}
 	return &environmentVariables
 }
@@ -27,7 +29,7 @@ func Init() *EnvironmentVariables {
 func GetEnvironmentVariableByKey(key string) string {
 	s := os.Getenv(key)
 	if s == "" {
-		log.Println("Failed to grab environment variable with key ", key)
+		log.Println("Failed to grab environment variable with key", key)
 	}
 	return s
 }
