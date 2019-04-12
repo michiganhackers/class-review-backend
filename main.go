@@ -31,5 +31,6 @@ func main() {
 	servs := services.DefaultServices(repos)
 	controllers.DefaultControllers(r, servs)
 
+	repos.ReviewRepository.TestDB()
 	r.Run(":8080")
 }
