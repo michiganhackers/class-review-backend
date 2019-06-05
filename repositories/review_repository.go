@@ -32,12 +32,14 @@ func (rr *ReviewRepository) GetReview(id uint64) (*models.Review, error) {
 }
 
 func (rr *ReviewRepository) TestDB() {
-	rows, err := rr.Database.Query("SELECT id, name FROM dev_class_review.test_table")
-	if err != nil {
-		fmt.Println(err)
-	}
+	_, err := rr.Database.Exec(`CREATE TABLE IF NOT EXISTS test(
+		name varchar(255),
+		value varchar(255)
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8`)
 
-	for rows.Next() {
-		// Do something
+	if err != nil {
+		fmt.Println(err, "Could not create table")
+	} else {
+		fmt.Println("No error")
 	}
 }

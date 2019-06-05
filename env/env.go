@@ -15,7 +15,7 @@ type EnvironmentVariables struct {
 
 func Init() *EnvironmentVariables {
 
-	// Get environment variabless
+	// Get environment variables
 	environmentVariables := EnvironmentVariables{
 		DBName:     GetEnvironmentVariableByKey("DB_NAME"),
 		DBUser:     GetEnvironmentVariableByKey("DB_USER"),

@@ -20,7 +20,7 @@ func DefaultReviewController(eng *gin.Engine, services *services.Services) *Revi
 		Services: services,
 	}
 
-	rc.Routes.GET("/review/:id", rc.getReview)
+	rc.Routes.GET("/:id", rc.getReview)
 	return rc
 }
 
