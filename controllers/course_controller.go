@@ -20,7 +20,7 @@ func DefaultCourseController(eng *gin.Engine, services *services.Services) *Cour
 		Services: services,
 	}
 
-	cc.Routes.GET("/course/:id", rc.getCourse)
+	cc.Routes.GET("/:id", cc.getCourse)
 	return cc
 }
 

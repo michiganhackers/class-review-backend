@@ -12,7 +12,6 @@ func CreateDB() *sqlx.DB {
 	environmentVariables := env.Init()
 	connection := environmentVariables.DBUser + ":" + environmentVariables.DBPassword + "@tcp(" + environmentVariables.DBServer + ":" + environmentVariables.DBPort + ")/" + environmentVariables.DBName
 	db, err := sql.Open("mysql", connection)
-	fmt.Println(connection)
 	if err != nil {
 		fmt.Println("Failed to open database: ", err.Error())
 	}

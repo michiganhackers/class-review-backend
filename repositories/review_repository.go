@@ -10,10 +10,6 @@ import (
 type IReviewRepository interface {
 	GetReview(uint64) (*models.Review, error)
 	TestDB()
-)
-
-type IReviewRepository interface {
-    GetReview(uint64) (*models.Review, error)
 }
 
 // Implements IReviewRepository
@@ -30,8 +26,8 @@ func DefaultReviewRepository(db *sqlx.DB) *ReviewRepository {
 
 func (rr *ReviewRepository) GetReview(id uint64) (*models.Review, error) {
 
-    var review models.Review
-    return &review, nil
+	var review models.Review
+	return &review, nil
 
 }
 
