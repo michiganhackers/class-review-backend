@@ -1,5 +1,6 @@
-/vendor/*
-!/vendor/vendor.json
+/vendor/github.com
+/vendor/golang.org
+/vendor/gopkg.in
 .env
 *.exe
 *.exe~
