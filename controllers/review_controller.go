@@ -20,8 +20,9 @@ func DefaultReviewController(eng *gin.Engine, services *services.Services) *Revi
         Services: services,
     }
 
-    rc.Routes.GET("/review/:id", rc.getReview)
-    return rc
+	rc.Routes.GET("/:id", rc.getReview)
+	return rc
+
 }
 
 func (rc *ReviewController) getReview(c *gin.Context) {

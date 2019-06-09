@@ -1,15 +1,19 @@
 package repositories
 
-type Repositories struct {
-    ReviewRepository IReviewRepository
-    CourseRepository ICourseRepository
+import (
+	"github.com/jmoiron/sqlx"
+)
 
-    // TODO: put database engine here
+type Repositories struct {
+	ReviewRepository IReviewRepository
+  CourseRepository ICourseRepository
+	Database         *sqlx.DB
 }
 
-func DefaultRepositories() *Repositories {
-    return &Repositories{
-        ReviewRepository: DefaultReviewRepository(),
-        CourseRepository: DefaultCourseRepository(),
-    }
+func DefaultRepositories(db *sqlx.DB) *Repositories {
+	return &Repositories{
+		ReviewRepository: DefaultReviewRepository(db),
+    CourseRepository: DefaultCourseRepository(),
+		Database:         db,
+	}
 }
