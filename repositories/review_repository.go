@@ -18,7 +18,6 @@ type ReviewRepository struct {
 }
 
 func DefaultReviewRepository(db *sqlx.DB) *ReviewRepository {
-	// TODO: set up database engine here
 	return &ReviewRepository{
 		Database: db,
 	}

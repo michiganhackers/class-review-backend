@@ -5,15 +5,17 @@ import (
 )
 
 type Repositories struct {
-	ReviewRepository IReviewRepository
-  CourseRepository ICourseRepository
-	Database         *sqlx.DB
+	ReviewRepository    IReviewRepository
+	CourseRepository    ICourseRepository
+	ProfessorRepository IProfessorRepository
+	Database            *sqlx.DB
 }
 
 func DefaultRepositories(db *sqlx.DB) *Repositories {
 	return &Repositories{
-		ReviewRepository: DefaultReviewRepository(db),
-    CourseRepository: DefaultCourseRepository(),
-		Database:         db,
+		ReviewRepository:    DefaultReviewRepository(db),
+		CourseRepository:    DefaultCourseRepository(),
+		ProfessorRepository: DefaultProfessorRepository(db),
+		Database:            db,
 	}
 }
