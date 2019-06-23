@@ -1,3 +1,3 @@
-ALTER TABLE IF EXISTS courses (
-    ADD CONSTRAINT fk_courseId FOREIGN KEY (courseId) REFERENCES reviews(courseId)
+ALTER TABLE IF EXISTS reviews (
+    ADD CONSTRAINT fk_courseId FOREIGN KEY (courseId) REFERENCES courses(courseId)
 )
