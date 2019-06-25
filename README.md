@@ -1,6 +1,6 @@
 # class-review-backend
 
-#Go Setup
+# Go Setup
 1. Download and install go
 2. Figure out your GOPATH
 3. cd to $GOPATH/src amd clone this repo there
@@ -10,7 +10,7 @@
 
 
 
-#Local Database (MySQL) Setup
+# Local Database (MySQL) Setup
 Install MySQL Server
 https://dev.mysql.com/downloads/mysql/
 
@@ -25,7 +25,7 @@ https://dev.mysql.com/downloads/workbench/
 6. Go to schema privileges tab and add entry and select classreviews
 7. Select all privileges and apply to classreviews
 
-#Env Setup
+# Env Setup
 1. Create a new file name .env in the `class-review-backend/`
 2. Add this as the content but replace password with the password you created for your MySQL User
 
@@ -36,6 +36,6 @@ DB_SERVER=127.0.0.1
 DB_PORT=3306
 ```
 
-#Running
+# Running
 1. Run `go run main.go`
 2. Navigate to 'http://127.0.0.1:8080/' 
