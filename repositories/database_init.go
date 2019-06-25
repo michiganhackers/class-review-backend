@@ -10,7 +10,7 @@ import (
 
 func CreateDB() *sqlx.DB {
 	environmentVariables := env.Init()
-	connection := environmentVariables.DBUser + ":" + environmentVariables.DBPassword + "@tcp(" + environmentVariables.DBServer + ":" + environmentVariables.DBPort + ")/" + environmentVariables.DBName
+	connection := environmentVariables.DBUser + ":" + environmentVariables.DBPassword + "@tcp(" + environmentVariables.DBServer + ":" + environmentVariables.DBPort + ")/" + environmentVariables.DBName+"?allowNativePasswords=True"
 	db, err := sql.Open("mysql", connection)
 	if err != nil {
 		fmt.Println("Failed to open database: ", err.Error())
