@@ -16,3 +16,10 @@
 
 # Build Executable
 class-review-backend
+
+#GOLAND IDE
+.idea
+
+#Mac OSX FILES
+.DS_Store
+*/.DS_Store
