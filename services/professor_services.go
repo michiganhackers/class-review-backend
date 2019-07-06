@@ -7,11 +7,13 @@ import (
 )
 
 type IProfessorService interface {
-	GetProfessors() (*[]models.Professor, error)
-	GetProfessorByReviewID(uint64) (*models.Professor, error)
-	GetProfessorsByCourseID(uint64) (*[]models.Professor, error)
+	GetAllProfessors() (*[]models.Professor, error)
+	GetProfessorByUniqname(string) (*models.Professor, error)
+	PostProfessor(*models.Professor) error
+	UpdateProfessor(*models.Professor, string) (*models.Professor, error)
+	DeleteProfessor(string) error
 	GetProfessorStats() (*[]models.ProfessorStats, error)
-	GetProfessorStatsByName(string) (*models.ProfessorStats, error)
+	GetProfessorStatsByUniqname(string) (*models.ProfessorStats, error)
 }
 
 // Implements IProfessorService
@@ -25,22 +27,30 @@ func DefaultProfessorServices(repos *repositories.Repositories) *ProfessorServic
 	}
 }
 
-func (ps *ProfessorService) GetProfessors() (*[]models.Professor, error) {
-	return ps.Repositories.ProfessorRepository.GetProfessors()
+func (ps *ProfessorService) GetAllProfessors() (*[]models.Professor, error) {
+	return ps.Repositories.ProfessorRepository.GetAllProfessors()
 }
 
-func (ps *ProfessorService) GetProfessorByReviewID(id uint64) (*models.Professor, error) {
-	return ps.Repositories.ProfessorRepository.GetProfessorByReviewID(id)
+func (ps *ProfessorService) GetProfessorByUniqname(uniqname string) (*models.Professor, error) {
+	return ps.Repositories.ProfessorRepository.GetProfessorByUniqname(uniqname)
 }
 
-func (ps *ProfessorService) GetProfessorsByCourseID(id uint64) (*[]models.Professor, error) {
-	return ps.Repositories.ProfessorRepository.GetProfessorsByCourseID(id)
+func (ps *ProfessorService) PostProfessor(professorInput *models.Professor) error {
+	return ps.Repositories.ProfessorRepository.PostProfessor(professorInput)
+}
+
+func (ps *ProfessorService) UpdateProfessor(professorInput *models.Professor, uniqname string) (*models.Professor, error) {
+	return ps.Repositories.ProfessorRepository.UpdateProfessor(professorInput, uniqname)
+}
+
+func (ps *ProfessorService) DeleteProfessor(uniqname string) error {
+	return ps.Repositories.ProfessorRepository.DeleteProfessor(uniqname)
 }
 
 func (ps *ProfessorService) GetProfessorStats() (*[]models.ProfessorStats, error) {
 	return ps.Repositories.ProfessorRepository.GetProfessorStats()
 }
 
-func (ps *ProfessorService) GetProfessorStatsByName(name string) (*models.ProfessorStats, error) {
-	return ps.Repositories.ProfessorRepository.GetProfessorStatsByName(name)
+func (ps *ProfessorService) GetProfessorStatsByUniqname(uniqname string) (*models.ProfessorStats, error) {
+	return ps.Repositories.ProfessorRepository.GetProfessorStatsByUniqname(uniqname)
 }

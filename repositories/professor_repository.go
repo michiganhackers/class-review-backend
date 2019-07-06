@@ -8,11 +8,13 @@ import (
 )
 
 type IProfessorRepository interface {
-	GetProfessors() (*[]models.Professor, error)
-	GetProfessorByReviewID(uint64) (*models.Professor, error)
-	GetProfessorsByCourseID(uint64) (*[]models.Professor, error)
+	GetAllProfessors() (*[]models.Professor, error)
+	GetProfessorByUniqname(string)(*models.Professor, error)
+	PostProfessor(*models.Professor) error
+	UpdateProfessor(*models.Professor, string) (*models.Professor, error)
+	DeleteProfessor(string) error
 	GetProfessorStats() (*[]models.ProfessorStats, error)
-	GetProfessorStatsByName(string) (*models.ProfessorStats, error)
+	GetProfessorStatsByUniqname(string) (*models.ProfessorStats, error)
 }
 
 // Implements IProfessorRepository
@@ -26,51 +28,77 @@ func DefaultProfessorRepository(db *sqlx.DB) *ProfessorRepository {
 	}
 }
 
-func (pr *ProfessorRepository) GetProfessors() (*[]models.Professor, error) {
+func (pr *ProfessorRepository) GetAllProfessors() (*[]models.Professor, error) {
 	var professors []models.Professor
-	err := pr.Database.Select(&professors, `SELECT DISTINCT professor_name FROM reviews`)
+	err := pr.Database.Select(&professors, `SELECT professor_uniqname, 
+ 												   professor_name 
+										    FROM professors`)
 	if err != nil {
-		log.Println("Error in GetProfessors: ", err)
+		log.Println("Error in GetAllProfessors:", err)
 		return &professors, err
 	}
 
 	return &professors, nil
 }
 
-func (pr *ProfessorRepository) GetProfessorByReviewID(id uint64) (*models.Professor, error) {
+func (pr *ProfessorRepository) GetProfessorByUniqname(uniqname string) (*models.Professor, error) {
 	var professor models.Professor
-	err := pr.Database.Get(&professor, `SELECT professor_name FROM reviews WHERE id=?`, id)
+	err := pr.Database.Get(&professor, `SELECT professor_uniqname, 
+											   professor_name 
+									 	FROM professors WHERE professor_uniqname=?`, uniqname)
 	if err != nil {
-		log.Println("Error in GetProfessorByReviewID: ", err)
+		log.Println("Error in GetProfessorByUniqname:", err)
 		return &professor, err
 	}
 
 	return &professor, nil
 }
 
-func (pr *ProfessorRepository) GetProfessorsByCourseID(id uint64) (*[]models.Professor, error) {
-	var professors []models.Professor
-	err := pr.Database.Select(&professors, `SELECT DISTINCT professor_name FROM reviews WHERE courseID=?`, id)
+func (pr *ProfessorRepository) PostProfessor(professorInput *models.Professor) error {
+	_, err := pr.Database.NamedExec(`INSERT INTO professors 
+									 VALUES (:professor_uniqname, 
+											 :professor_name)`, *professorInput)
 	if err != nil {
-		log.Println("Error in GetProfessorsByCourseID: ", err)
-		return &professors, err
+		log.Println("Error in PostProfessor:", err)
+		return err
+	}
+	return nil
+}
+
+func (pr *ProfessorRepository) UpdateProfessor(professorInput *models.Professor, uniqname string) (*models.Professor, error) {
+	professorInput.Uniqname = uniqname
+	_, err := pr.Database.NamedExec(`UPDATE professors 
+									 SET professor_name = :professor_name
+									 WHERE professor_uniqname = :professor_uniqname`, *professorInput)
+	if err != nil {
+		log.Println("Error in PutProfessor:", err)
+		return professorInput, err
+	}
+	return professorInput, nil
+}
+
+func (pr *ProfessorRepository) DeleteProfessor(uniqname string) error {
+	_, err := pr.Database.Exec(`DELETE FROM professors WHERE professor_uniqname=?`, uniqname)
+	if err != nil {
+		log.Println("Error in DeleteProfessor:", err)
+		return err
 	}
 
-	return &professors, nil
+	return nil
 }
 
 func (pr *ProfessorRepository) GetProfessorStats() (*[]models.ProfessorStats, error) {
 	var professorStats []models.ProfessorStats
-	professors, err := pr.GetProfessors()
+	professors, err := pr.GetAllProfessors()
 	if err != nil {
-		log.Println("Error in GetProfessorStats: ", err)
+		log.Println("Error in GetProfessorStats:", err)
 		return &professorStats, err
 	}
 
 	for _, element := range *professors {
-		individualProfStats, err := pr.GetProfessorStatsByName(element.Name)
+		individualProfStats, err := pr.GetProfessorStatsByUniqname(element.Uniqname)
 		if err != nil {
-			log.Println("Error in GetProfessorStats: ", err)
+			log.Println("Error in GetProfessorStats:", err)
 			return &professorStats, err
 		}
 		professorStats = append(professorStats, *individualProfStats)
@@ -79,18 +107,18 @@ func (pr *ProfessorRepository) GetProfessorStats() (*[]models.ProfessorStats, er
 	return &professorStats, nil
 }
 
-func (pr *ProfessorRepository) GetProfessorStatsByName(name string) (*models.ProfessorStats, error) {
+func (pr *ProfessorRepository) GetProfessorStatsByUniqname(uniqname string) (*models.ProfessorStats, error) {
 	var professorStats models.ProfessorStats
-	err := pr.Database.Get(&professorStats, `SELECT professor_name,
+	err := pr.Database.Get(&professorStats, `SELECT professor_uniqname, 
 													AVG(rating), 
 													AVG(difficulty), 
 													AVG(interest), 
 													SUM(helpfulCount), 
 													SUM(notHelpfulCount)
-											 FROM reviews WHERE professor_name=?`, name)
+											 FROM reviews WHERE professor_uniqname=?`, uniqname)
 
 	if err != nil {
-		log.Println("Error in GetProfessorStatsByName: ", err)
+		log.Println("Error in GetProfessorStatsByName:", err)
 		return &professorStats, err
 	}
 

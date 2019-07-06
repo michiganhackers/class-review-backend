@@ -1,11 +1,13 @@
 package models
 
 type Professor struct {
-	Name string	`db:"professor_name"`
+	Uniqname string `db:"professor_uniqname" json:"uniqname"`
+	Name 	 string	`db:"professor_name" json:"name"`
 }
 
 type ProfessorStats struct {
-	Name 				 string	 `db:"professor_name"`
+	Uniqname 			 string	 `db:"professor_uniqname"`
+	Name				 string	 `db:"professor_name"`
 	AvgRating          	 float32 `db:"AVG(rating)"`
 	AvgDifficulty      	 float32 `db:"AVG(difficulty)"`
 	AvgInterest        	 float32 `db:"AVG(interest)"`
