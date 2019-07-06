@@ -19,19 +19,20 @@ func DefaultProfessorController(eng *gin.Engine, services *services.Services) *P
         Services: services,
     }
 
-	pc.Routes.GET("", pc.getAllProfessors)
-    pc.Routes.GET("/:uniqname", pc.getProfessorByUniqname)
-    pc.Routes.POST("", pc.postProfessor)
-    pc.Routes.PUT("/:uniqname", pc.updateProfessor)
-    pc.Routes.DELETE("/:uniqname", pc.deleteProfessor)
-    // pc.Routes.GET("stats", pc.getProfessorStats)
-    // pc.Routes.GET("stats/:uniqname", pc.getProfessorStatsByUniqname)
+	pc.Routes.GET("names", pc.getAllProfessors)
+    pc.Routes.GET("names/:uniqname", pc.getProfessorByUniqname)
+    pc.Routes.POST("names", pc.postProfessor)
+    pc.Routes.PUT("names/:uniqname", pc.updateProfessor)
+    pc.Routes.DELETE("names/:uniqname", pc.deleteProfessor)
+    pc.Routes.GET("stats", pc.getProfessorStats)
+    pc.Routes.GET("stats/:uniqname", pc.getProfessorStatsByUniqname)
 	return pc
 }
 
 func (pc *ProfessorController) getAllProfessors(c *gin.Context) {
     professors, err := pc.Services.ProfessorService.GetAllProfessors()
     if err != nil {
+        log.Println("Professors not found")
         c.JSON(http.StatusNotFound, "Professors not found")
         return
     }
@@ -48,6 +49,7 @@ func (pc *ProfessorController) getProfessorByUniqname(c *gin.Context) {
     }
     professor, err := pc.Services.ProfessorService.GetProfessorByUniqname(uniqname)
     if err != nil {
+        log.Println("No professor with provided uniqname")
         c.JSON(http.StatusNotFound, "No professor with provided uniqname")
         return
     }
@@ -58,7 +60,7 @@ func (pc *ProfessorController) getProfessorByUniqname(c *gin.Context) {
 func (pc *ProfessorController) postProfessor(c *gin.Context) {
     var professorInput models.Professor
     err := c.BindJSON(&professorInput)
-    if err != nil {
+    if err != nil || professorInput.Name == "" || professorInput.Uniqname == "" {
         log.Println("Invalid request body")
         c.JSON(http.StatusBadRequest, "Invalid request body")
         return
@@ -82,7 +84,7 @@ func (pc *ProfessorController) updateProfessor(c *gin.Context) {
     }
     var professorInput models.Professor
     err := c.BindJSON(&professorInput)
-    if err != nil {
+    if err != nil || professorInput.Name == "" {
         log.Println("Invalid request body")
         c.JSON(http.StatusBadRequest, "Invalid request body")
         return
@@ -106,7 +108,8 @@ func (pc *ProfessorController) deleteProfessor(c *gin.Context) {
     }
     err := pc.Services.ProfessorService.DeleteProfessor(uniqname)
     if err != nil {
-        c.JSON(http.StatusNotFound, "No professor with provided uniqname")
+        log.Println("DELETE request failed")
+        c.JSON(http.StatusNotFound, "DELETE request failed")
         return
     }
     c.JSON(http.StatusOK, "OK")
@@ -116,6 +119,7 @@ func (pc *ProfessorController) deleteProfessor(c *gin.Context) {
 func (pc *ProfessorController) getProfessorStats(c *gin.Context) {
     professorStats, err := pc.Services.ProfessorService.GetProfessorStats()
     if err != nil {
+        log.Println("Professor stats not found")
         c.JSON(http.StatusNotFound, "Professor stats not found")
         return
     }
@@ -132,6 +136,7 @@ func (pc *ProfessorController) getProfessorStatsByUniqname(c *gin.Context) {
     }
     professorStats, err := pc.Services.ProfessorService.GetProfessorStatsByUniqname(uniqname)
     if err != nil {
+        log.Println("No professor stats with provided uniqname")
         c.JSON(http.StatusNotFound, "No professor stats with provided uniqname")
         return
     }

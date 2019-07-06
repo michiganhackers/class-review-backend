@@ -89,14 +89,15 @@ func (pr *ProfessorRepository) DeleteProfessor(uniqname string) error {
 
 func (pr *ProfessorRepository) GetProfessorStats() (*[]models.ProfessorStats, error) {
 	var professorStats []models.ProfessorStats
-	professors, err := pr.GetAllProfessors()
+	var professorUniqnames []string
+	err := pr.Database.Select(&professorUniqnames, `SELECT DISTINCT professor_uniqname FROM reviews`)
 	if err != nil {
 		log.Println("Error in GetProfessorStats:", err)
 		return &professorStats, err
 	}
 
-	for _, element := range *professors {
-		individualProfStats, err := pr.GetProfessorStatsByUniqname(element.Uniqname)
+	for _, element := range professorUniqnames {
+		individualProfStats, err := pr.GetProfessorStatsByUniqname(element)
 		if err != nil {
 			log.Println("Error in GetProfessorStats:", err)
 			return &professorStats, err
@@ -116,7 +117,6 @@ func (pr *ProfessorRepository) GetProfessorStatsByUniqname(uniqname string) (*mo
 													SUM(helpfulCount), 
 													SUM(notHelpfulCount)
 											 FROM reviews WHERE professor_uniqname=?`, uniqname)
-
 	if err != nil {
 		log.Println("Error in GetProfessorStatsByName:", err)
 		return &professorStats, err
