@@ -3,16 +3,13 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
 // returns [google id], [error message] if the token is valid
 func authenticate(id_token string) (string, error) {
 	resp, err := http.Get("https://oauth2.googleapis.com/tokeninfo?id_token=" + id_token)
-	fmt.Println(resp.StatusCode)
 	if err != nil {
 		return "", err
 	}
@@ -24,8 +21,8 @@ func authenticate(id_token string) (string, error) {
 		return "", err
 	}
 	var token map[string]interface{}
+	// unpack response body as byte[] into a map
 	json.Unmarshal(bodyBytes, &token)
-	log.Println("token audience:", token["aud"])
 
 	// I don't think we'll ever reach this but go makes you assert type
 	// of an interface before returning
