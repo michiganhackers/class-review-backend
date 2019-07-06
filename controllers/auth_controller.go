@@ -26,7 +26,7 @@ func authenticate(id_token string) (string, error) {
 
 	// I don't think we'll ever reach this but go makes you assert type
 	// of an interface before returning
-	s, ok := token["aud"].(string)
+	aud, ok := token["aud"].(string)
 	if !ok {
 		return "", errors.New("token's underlying type is not a string")
 	}
@@ -35,5 +35,5 @@ func authenticate(id_token string) (string, error) {
 	// for reference, this is an example of an aud claim:
 	// 407408718192.apps.googleusercontent.com
 
-	return s, nil
+	return aud, nil
 }
