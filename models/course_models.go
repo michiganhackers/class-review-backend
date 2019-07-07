@@ -1,9 +1,5 @@
 package models
 
-import (
-	"time"
-)
-
 // TODO: add appropriate struct tags
 
 type Course struct {
@@ -12,6 +8,6 @@ type Course struct {
 	number     uint8
 	subsection uint8
 	title      string
-	date       time.Time
+	term       string
 	reviews    []Review
 }
