@@ -28,12 +28,17 @@ func authenticate(id_token string) (string, error) {
 	// of an interface before returning
 	aud, ok := token["aud"].(string)
 	if !ok {
-		return "", errors.New("token's underlying type is not a string")
+		return "", errors.New("aud claim's underlying type is not a string")
 	}
 
 	// TODO: Authenticate aud (make sure aud is in the app's client IDs)
 	// for reference, this is an example of an aud claim:
 	// 407408718192.apps.googleusercontent.com
 
-	return aud, nil
+	// once a user is validated, return their id (contained in the sub claim)
+	sub, ok := token["sub"].(string)
+	if !ok {
+		return "", errors.New("sub claim's underlying type is not a string")
+	}
+	return sub, nil
 }
