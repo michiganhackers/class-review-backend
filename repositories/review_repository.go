@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"class-review-backend/models"
-	"fmt"
+	"log"
 
 	"github.com/jmoiron/sqlx"
 )

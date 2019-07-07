@@ -3,7 +3,7 @@ package repositories
 import (
 	"class-review-backend/env"
 	"database/sql"
-	"fmt"
+	"log"
 
 	"github.com/jmoiron/sqlx"
 )
