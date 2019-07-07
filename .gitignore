@@ -16,3 +16,7 @@
 
 # Build Executable
 class-review-backend
+
+# Jetbrains
+.idea/
+
