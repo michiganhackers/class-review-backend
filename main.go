@@ -2,6 +2,7 @@ package main
 
 import (
 	"class-review-backend/controllers"
+	"class-review-backend/env"
 	"class-review-backend/repositories"
 	"class-review-backend/services"
 	"log"
@@ -26,7 +27,8 @@ func main() {
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
-	db := repositories.CreateDB()
+	environmentVariables := env.Init()
+	db := repositories.CreateDB(environmentVariables)
 	repos := repositories.DefaultRepositories(db)
 	servs := services.DefaultServices(repos)
 	controllers.DefaultControllers(r, servs)
