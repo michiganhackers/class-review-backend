@@ -14,10 +14,12 @@ type EnvironmentVariables struct {
 	ClientId   string
 }
 
-func Init() *EnvironmentVariables {
+var Variables *EnvironmentVariables
+
+func Init() {
 
 	// Get environment variables
-	environmentVariables := EnvironmentVariables{
+	Variables = &EnvironmentVariables{
 		DBName:     getEnvironmentVariableByKey("DB_NAME"),
 		DBUser:     getEnvironmentVariableByKey("DB_USER"),
 		DBPassword: getEnvironmentVariableByKey("DB_PASSWORD"),
@@ -25,7 +27,6 @@ func Init() *EnvironmentVariables {
 		DBPort:     getEnvironmentVariableByKey("DB_PORT"),
 		ClientId:   getEnvironmentVariableByKey("CLIENT_ID"),
 	}
-	return &environmentVariables
 }
 
 func getEnvironmentVariableByKey(key string) string {

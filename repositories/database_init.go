@@ -8,8 +8,8 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func CreateDB(environmentVariables *env.EnvironmentVariables) *sqlx.DB {
-	connection := environmentVariables.DBUser + ":" + environmentVariables.DBPassword + "@tcp(" + environmentVariables.DBServer + ":" + environmentVariables.DBPort + ")/" + environmentVariables.DBName
+func CreateDB() *sqlx.DB {
+	connection := env.Variables.DBUser + ":" + env.Variables.DBPassword + "@tcp(" + env.Variables.DBServer + ":" + env.Variables.DBPort + ")/" + env.Variables.DBName
 	db, err := sql.Open("mysql", connection)
 	if err != nil {
 		log.Println("Failed to open database: ", err.Error())

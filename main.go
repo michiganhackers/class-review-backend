@@ -21,12 +21,12 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	environmentVariables := env.Init()
+	env.Init()
 
-	db := repositories.CreateDB(environmentVariables)
+	db := repositories.CreateDB()
 	repos := repositories.DefaultRepositories(db)
 	servs := services.DefaultServices(repos)
-	controllers.DefaultControllers(r, servs, environmentVariables)
+	controllers.DefaultControllers(r, servs)
 
 	r.Run(":8080")
 }
