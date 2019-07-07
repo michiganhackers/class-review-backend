@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"class-review-backend/env"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -15,6 +16,7 @@ func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		user := session.Get("user")
+		id_token := c.GetHeader("id_token") // not sure what we'll call the key, id_token seems fine
 		if user == nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "user needs to be signed in to access this service"})
 			c.Abort()
@@ -31,6 +33,12 @@ func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 		// add session verification here, like checking if the user and authType
 		// combination actually exists if necessary. Try adding caching this (redis)
 		// since this middleware might be called a lot
+		_, err := authenticate(id_token)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "could not authenticate id token -- " + err.Error()})
+			c.Abort()
+			return
+		}
 		c.Next()
 	}
 }
@@ -58,12 +66,16 @@ func authenticate(id_token string) (string, error) {
 	if !ok {
 		return "", errors.New("aud claim's underlying type is not a string")
 	}
+	ClientId := env.Variables.ClientId
+	if aud != ClientId {
+		return "", errors.New("application client Id and aud claim " + aud + " do not match")
+	}
 
 	// TODO: Authenticate aud (make sure aud is in the app's client IDs)
 	// for reference, this is an example of an aud claim:
 	// 407408718192.apps.googleusercontent.com
 
-	// once a user is validated, return their id (contained in the sub claim)
+	// once a user is validated, return their id (contained in the sub claim), and no error
 	sub, ok := token["sub"].(string)
 	if !ok {
 		return "", errors.New("sub claim's underlying type is not a string")
