@@ -8,12 +8,12 @@ import (
 )
 
 type IProfessorRepository interface {
-	GetAllProfessors() (*[]models.Professor, error)
+	GetAllProfessors() ([]models.Professor, error)
 	GetProfessorByUniqname(string)(*models.Professor, error)
 	PostProfessor(*models.Professor) error
 	UpdateProfessor(*models.Professor, string) (*models.Professor, error)
 	DeleteProfessor(string) error
-	GetProfessorStats() (*[]models.ProfessorStats, error)
+	GetProfessorStats() ([]models.ProfessorStats, error)
 	GetProfessorStatsByUniqname(string) (*models.ProfessorStats, error)
 }
 
@@ -28,17 +28,17 @@ func DefaultProfessorRepository(db *sqlx.DB) *ProfessorRepository {
 	}
 }
 
-func (pr *ProfessorRepository) GetAllProfessors() (*[]models.Professor, error) {
+func (pr *ProfessorRepository) GetAllProfessors() ([]models.Professor, error) {
 	var professors []models.Professor
 	err := pr.Database.Select(&professors, `SELECT professor_uniqname, 
  												   professor_name 
 										    FROM professors`)
 	if err != nil {
 		log.Println("Error in GetAllProfessors:", err)
-		return &professors, err
+		return professors, err
 	}
 
-	return &professors, nil
+	return professors, nil
 }
 
 func (pr *ProfessorRepository) GetProfessorByUniqname(uniqname string) (*models.Professor, error) {
@@ -57,7 +57,7 @@ func (pr *ProfessorRepository) GetProfessorByUniqname(uniqname string) (*models.
 func (pr *ProfessorRepository) PostProfessor(professorInput *models.Professor) error {
 	_, err := pr.Database.NamedExec(`INSERT INTO professors 
 									 VALUES (:professor_uniqname, 
-											 :professor_name)`, *professorInput)
+											 :professor_name)`, professorInput)
 	if err != nil {
 		log.Println("Error in PostProfessor:", err)
 		return err
@@ -69,7 +69,7 @@ func (pr *ProfessorRepository) UpdateProfessor(professorInput *models.Professor,
 	professorInput.Uniqname = uniqname
 	_, err := pr.Database.NamedExec(`UPDATE professors 
 									 SET professor_name = :professor_name
-									 WHERE professor_uniqname = :professor_uniqname`, *professorInput)
+									 WHERE professor_uniqname = :professor_uniqname`, professorInput)
 	if err != nil {
 		log.Println("Error in PutProfessor:", err)
 		return professorInput, err
@@ -87,25 +87,25 @@ func (pr *ProfessorRepository) DeleteProfessor(uniqname string) error {
 	return nil
 }
 
-func (pr *ProfessorRepository) GetProfessorStats() (*[]models.ProfessorStats, error) {
+func (pr *ProfessorRepository) GetProfessorStats() ([]models.ProfessorStats, error) {
 	var professorStats []models.ProfessorStats
 	var professorUniqnames []string
 	err := pr.Database.Select(&professorUniqnames, `SELECT DISTINCT professor_uniqname FROM reviews`)
 	if err != nil {
 		log.Println("Error in GetProfessorStats:", err)
-		return &professorStats, err
+		return professorStats, err
 	}
 
 	for _, element := range professorUniqnames {
 		individualProfStats, err := pr.GetProfessorStatsByUniqname(element)
 		if err != nil {
 			log.Println("Error in GetProfessorStats:", err)
-			return &professorStats, err
+			return professorStats, err
 		}
 		professorStats = append(professorStats, *individualProfStats)
 	}
 
-	return &professorStats, nil
+	return professorStats, nil
 }
 
 func (pr *ProfessorRepository) GetProfessorStatsByUniqname(uniqname string) (*models.ProfessorStats, error) {

@@ -1,7 +1,3 @@
-DELETE FROM reviews;
-DELETE FROM professors;
-DELETE FROM courses;
-
 INSERT INTO professors
 VALUES
 	('1', 'one'), 

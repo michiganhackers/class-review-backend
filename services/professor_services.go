@@ -7,12 +7,12 @@ import (
 )
 
 type IProfessorService interface {
-	GetAllProfessors() (*[]models.Professor, error)
+	GetAllProfessors() ([]models.Professor, error)
 	GetProfessorByUniqname(string) (*models.Professor, error)
 	PostProfessor(*models.Professor) error
 	UpdateProfessor(*models.Professor, string) (*models.Professor, error)
 	DeleteProfessor(string) error
-	GetProfessorStats() (*[]models.ProfessorStats, error)
+	GetProfessorStats() ([]models.ProfessorStats, error)
 	GetProfessorStatsByUniqname(string) (*models.ProfessorStats, error)
 }
 
@@ -27,7 +27,7 @@ func DefaultProfessorServices(repos *repositories.Repositories) *ProfessorServic
 	}
 }
 
-func (ps *ProfessorService) GetAllProfessors() (*[]models.Professor, error) {
+func (ps *ProfessorService) GetAllProfessors() ([]models.Professor, error) {
 	return ps.Repositories.ProfessorRepository.GetAllProfessors()
 }
 
@@ -47,7 +47,7 @@ func (ps *ProfessorService) DeleteProfessor(uniqname string) error {
 	return ps.Repositories.ProfessorRepository.DeleteProfessor(uniqname)
 }
 
-func (ps *ProfessorService) GetProfessorStats() (*[]models.ProfessorStats, error) {
+func (ps *ProfessorService) GetProfessorStats() ([]models.ProfessorStats, error) {
 	return ps.Repositories.ProfessorRepository.GetProfessorStats()
 }
 
