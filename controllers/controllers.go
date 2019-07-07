@@ -29,15 +29,14 @@ func DefaultControllers(r *gin.Engine, services *services.Services) *Controllers
 	routes := &Routes{
 		Private: r.Group("/"),
 		Public:  r.Group("/"),
-		Admin:   r.Group("/admin"),
 	}
 
-	routes.Private.Use(AuthenticationRequired("private", "admin"))
+	routes.Private.Use(AuthenticationRequired("private"))
 
 	controllers := &Controllers{
-		ReviewController:    DefaultReviewController(r, services),
-		CourseController:    DefaultCourseController(r, services),
-		ProfessorController: DefaultProfessorController(r, services),
+		ProfessorController: DefaultProfessorController(routes, services),
+		ReviewController:    DefaultReviewController(routes, services),
+		CourseController:    DefaultCourseController(routes, services),
 	}
 	return controllers
 }
