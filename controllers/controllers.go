@@ -15,7 +15,6 @@ type Controllers struct {
 type Routes struct {
 	Private *gin.RouterGroup
 	Public  *gin.RouterGroup
-	Admin   *gin.RouterGroup
 }
 
 func AuthenticationRequired(auths ...string) gin.HandlerFunc {
@@ -31,7 +30,7 @@ func DefaultControllers(r *gin.Engine, services *services.Services) *Controllers
 		Public:  r.Group("/"),
 	}
 
-	routes.Private.Use(AuthenticationRequired("private"))
+	routes.Private.Use(AuthenticationRequired())
 
 	controllers := &Controllers{
 		ProfessorController: DefaultProfessorController(routes, services),
