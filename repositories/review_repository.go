@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"class-review-backend/models"
-	"fmt"
+	"log"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -38,8 +38,8 @@ func (rr *ReviewRepository) TestDB() {
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8`)
 
 	if err != nil {
-		fmt.Println(err, "Could not create table")
+		log.Println(err, "Could not create table")
 	} else {
-		fmt.Println("No error")
+		log.Println("No error")
 	}
 }
