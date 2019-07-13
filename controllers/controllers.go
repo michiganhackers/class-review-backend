@@ -30,7 +30,7 @@ func DefaultControllers(r *gin.Engine, services *services.Services) *Controllers
 		Public:  r.Group("/"),
 	}
 
-	routes.Private.Use(AuthenticationRequired())
+	//routes.Private.Use(AuthenticationRequired())
 
 	controllers := &Controllers{
 		ProfessorController: DefaultProfessorController(routes, services),
