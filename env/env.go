@@ -3,6 +3,8 @@ package env
 import (
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type EnvironmentVariables struct {
@@ -17,6 +19,10 @@ type EnvironmentVariables struct {
 var Variables *EnvironmentVariables
 
 func Init() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	// Get environment variables
 	Variables = &EnvironmentVariables{
