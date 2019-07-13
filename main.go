@@ -13,9 +13,8 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.Use(controllers.CORS())
-
 	env.Init()
+	r.Use(controllers.CORS())
 
 	db := repositories.CreateDB()
 	repos := repositories.DefaultRepositories(db)
