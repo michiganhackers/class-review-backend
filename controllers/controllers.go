@@ -12,11 +12,30 @@ type Controllers struct {
 	ProfessorController *ProfessorController
 }
 
+type Routes struct {
+	Private *gin.RouterGroup
+	Public  *gin.RouterGroup
+}
+
+func AuthenticationRequired(auths ...string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// TODO
+	}
+}
+
 func DefaultControllers(r *gin.Engine, services *services.Services) *Controllers {
+
+	routes := &Routes{
+		Private: r.Group("/"),
+		Public:  r.Group("/"),
+	}
+
+	//routes.Private.Use(AuthenticationRequired())
+
 	controllers := &Controllers{
-		ReviewController:    DefaultReviewController(r, services),
-		CourseController:    DefaultCourseController(r, services),
-		ProfessorController: DefaultProfessorController(r, services),
+		ProfessorController: DefaultProfessorController(routes, services),
+		ReviewController:    DefaultReviewController(routes, services),
+		CourseController:    DefaultCourseController(routes, services),
 	}
 	return controllers
 }

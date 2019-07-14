@@ -11,16 +11,16 @@ import (
 
 type CourseController struct {
 	Services *services.Services
-	Routes   *gin.RouterGroup
+	Routes   *Routes
 }
 
-func DefaultCourseController(eng *gin.Engine, services *services.Services) *CourseController {
+func DefaultCourseController(routes *Routes, services *services.Services) *CourseController {
 	cc := &CourseController{
-		Routes:   eng.Group("/course"),
+		Routes:   routes,
 		Services: services,
 	}
 
-	cc.Routes.GET("/:id", cc.getCourse)
+	cc.Routes.Public.GET("/course/:id", cc.getCourse)
 	return cc
 }
 
