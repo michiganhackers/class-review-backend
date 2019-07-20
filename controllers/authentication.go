@@ -6,42 +6,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-
-	"github.com/gin-gonic/contrib/sessions"
-	"github.com/gin-gonic/gin"
-	"github.com/thoas/go-funk"
 )
-
-func AuthenticationRequired(auths ...string) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		session := sessions.Default(c)
-		user := session.Get("user")
-		id_token := c.GetHeader("id_token") // not sure what we'll call the key, id_token seems fine
-		if user == nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "user needs to be signed in to access this service"})
-			c.Abort()
-			return
-		}
-		if len(auths) != 0 {
-			authType := session.Get("authType")
-			if authType == nil || !funk.ContainsString(auths, authType.(string)) {
-				c.JSON(http.StatusForbidden, gin.H{"error": "invalid request, restricted endpoint"})
-				c.Abort()
-				return
-			}
-		}
-		// add session verification here, like checking if the user and authType
-		// combination actually exists if necessary. Try adding caching this (redis)
-		// since this middleware might be called a lot
-		_, err := authenticate(id_token)
-		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "could not authenticate id token -- " + err.Error()})
-			c.Abort()
-			return
-		}
-		c.Next()
-	}
-}
 
 // returns [google id], [error message] if the token is valid
 func authenticate(id_token string) (string, error) {

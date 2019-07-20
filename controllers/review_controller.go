@@ -26,6 +26,14 @@ func DefaultReviewController(routes *Routes, services *services.Services) *Revie
 }
 
 func (rc *ReviewController) getReview(c *gin.Context) {
+	// is this where I should check if the user's token is valid?
+	id_token := c.GetHeader("ID-Token")
+	_, valid := tokenCache.Get(id_token)
+	if !valid {
+		log.Println("User token invalid")
+		c.JSON(http.StatusForbidden, "User token invalid")
+	}
+
 	idStr := c.Param("id")
 	if idStr == "" {
 		log.Println("No id in url")
