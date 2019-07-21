@@ -1,0 +1,421 @@
+{
+	"info": {
+		"_postman_id": "1ecf01ed-373a-4a63-80fb-eed7c32c28aa",
+		"name": "professors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get All Professors",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d66a7ea8-82d8-4488-80bf-47a5c467919a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Data is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].uniqname).to.eql('1');",
+							"    pm.expect(jsonData[0].name).to.eql('one');",
+							"    ",
+							"    pm.expect(jsonData[1].uniqname).to.eql('2');",
+							"    pm.expect(jsonData[1].name).to.eql('two');",
+							"    ",
+							"    pm.expect(jsonData[2].uniqname).to.eql('3');",
+							"    pm.expect(jsonData[2].name).to.eql('three');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/names",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"names"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Professor By Uniqname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fefa797-7587-464c-8795-5d9ce701d5be",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Data is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.uniqname).to.eql('1');",
+							"    pm.expect(jsonData.name).to.eql('one');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/names/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"names",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post New Professor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fefa797-7587-464c-8795-5d9ce701d5be",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"uniqname\": \"test\",\r\n    \"name\": \"postman testing\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/names",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"names"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Posted Professor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fefa797-7587-464c-8795-5d9ce701d5be",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Data is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.uniqname).to.eql('test');",
+							"    pm.expect(jsonData.name).to.eql('postman testing');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/names/test",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"names",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put Professor By Uniqname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fefa797-7587-464c-8795-5d9ce701d5be",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Data is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.uniqname).to.eql('1');",
+							"    pm.expect(jsonData.name).to.eql('postman testing');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"postman testing\"\r\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/names/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"names",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Professor By Uniqname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fefa797-7587-464c-8795-5d9ce701d5be",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/names/test",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"names",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Deleted Professor",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fefa797-7587-464c-8795-5d9ce701d5be",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body('\"No professor with provided uniqname\"');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/names/test",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"names",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Professor Stats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d66a7ea8-82d8-4488-80bf-47a5c467919a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Data is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0].uniqname).to.eql('1');",
+							"    pm.expect(jsonData[0].avgRating).to.eql(5);",
+							"    pm.expect(jsonData[0].avgDifficulty).to.eql(5);",
+							"    pm.expect(jsonData[0].avgInterest).to.eql(5);",
+							"    pm.expect(jsonData[0].totalHelpfulCount).to.eql(15);",
+							"    pm.expect(jsonData[0].totalNotHelpfulCount).to.eql(15);",
+							"    ",
+							"    pm.expect(jsonData[1].uniqname).to.eql('2');",
+							"    pm.expect(jsonData[1].avgRating).to.eql(2);",
+							"    pm.expect(jsonData[1].avgDifficulty).to.eql(2);",
+							"    pm.expect(jsonData[1].avgInterest).to.eql(2);",
+							"    pm.expect(jsonData[1].totalHelpfulCount).to.eql(2);",
+							"    pm.expect(jsonData[1].totalNotHelpfulCount).to.eql(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/stats",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"stats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Professor Stats By Uniqname",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d66a7ea8-82d8-4488-80bf-47a5c467919a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Data is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.uniqname).to.eql('1');",
+							"    pm.expect(jsonData.avgRating).to.eql(5);",
+							"    pm.expect(jsonData.avgDifficulty).to.eql(5);",
+							"    pm.expect(jsonData.avgInterest).to.eql(5);",
+							"    pm.expect(jsonData.totalHelpfulCount).to.eql(15);",
+							"    pm.expect(jsonData.totalNotHelpfulCount).to.eql(15);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/professor/stats/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"professor",
+						"stats",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

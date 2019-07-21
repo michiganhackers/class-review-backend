@@ -6,10 +6,10 @@ type Professor struct {
 }
 
 type ProfessorStats struct {
-	Uniqname 			 string	 `db:"professor_uniqname"`
-	AvgRating          	 float32 `db:"AVG(rating)"`
-	AvgDifficulty      	 float32 `db:"AVG(difficulty)"`
-	AvgInterest        	 float32 `db:"AVG(interest)"`
-	TotalHelpfulCount    uint64  `db:"SUM(helpfulCount)"`
-	TotalNotHelpfulCount uint64	 `db:"SUM(notHelpfulCount)"`
+	Uniqname 			 string	 `db:"professor_uniqname" json:"uniqname"`
+	AvgRating          	 float32 `db:"AVG(rating)" json:"avgRating"`
+	AvgDifficulty      	 float32 `db:"AVG(difficulty)" json:"avgDifficulty"`
+	AvgInterest        	 float32 `db:"AVG(interest)" json:"avgInterest"`
+	TotalHelpfulCount    uint64  `db:"SUM(helpfulCount)" json:"totalHelpfulCount"`
+	TotalNotHelpfulCount uint64	 `db:"SUM(notHelpfulCount)" json:"totalNotHelpfulCount"`
 }
