@@ -34,16 +34,16 @@ func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		// add token to cache, set it to expire after an hour (I'm basically just using this as a set)
+		// add token to cache, set it to expire after an 30 mins (I'm basically just using this as a set)
 		// I went with empty string rather than nil to avoid confusion b/c .Get() returns nil if the key isn't found
-		tokenCache.Add(IDToken, "", time.Hour)
+		tokenCache.Add(IDToken, "", 30*time.Minute)
 		c.Next()
 	}
 }
 
 func DefaultControllers(r *gin.Engine, services *services.Services) *Controllers {
-	// create a new cache with default expiration 1 hour and cleanup time 3 hours
-	tokenCache = cache.New(time.Hour, time.Hour)
+	// create a new cache with default expiration 30 mins and cleanup time 30 mins
+	tokenCache = cache.New(30*time.Minute, 30*time.Minute)
 	routes := &Routes{
 		Private: r.Group("/"),
 		Public:  r.Group("/"),

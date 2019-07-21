@@ -6,18 +6,15 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 const TOKENINFO_ENDPOINT string = "https://oauth2.googleapis.com/tokeninfo?id_token="
 
 // returns no error if the token is valid
 func authenticate(IDToken string) error {
-	val, retrieved := tokenCache.Get(IDToken)
-	// if the user is in the cache, they've been active in the last hour and don't need to be revalidated
+	_, retrieved := tokenCache.Get(IDToken)
+	// if the user is in the cache, they've logged in within the last 30 mins and don't need to be revalidated
 	if retrieved {
-		// refresh the token expiration time
-		tokenCache.Replace(IDToken, val, time.Hour)
 		return nil
 	}
 	resp, err := http.Get(TOKENINFO_ENDPOINT + IDToken)
