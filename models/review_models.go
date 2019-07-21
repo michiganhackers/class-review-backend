@@ -18,4 +18,6 @@ type Review struct {
     professorUniqname   string
     helpfulCount        uint64
     notHelpfulCount     uint64
+    semester            string
+    userEmail           string
 }

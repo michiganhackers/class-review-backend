@@ -5,10 +5,11 @@ First, if you don't have Postman installed, get it at: https://www.getpostman.co
 Whether you are running tests or creating tests, make sure a local version of the backend is running
 
 To run these tests in Postman:
-    1. Open Postman and select import at the top left
-    2. Choose the json file based on which vertical you are testing
-    3. Click on the arrow next to the collection name in the sidebar and click the run button
-    4. Click the run button inside of Postman's collection runner
+    1. Run the sql script clear_tables.sql in the testdata directory, then run the script for your vertical's test data
+    2. Open Postman and select import at the top left
+    3. Choose the json file based on which vertical you are testing
+    4. Click on the arrow next to the collection name in the sidebar and click the run button
+    5. Click the run button inside of Postman's collection runner
 
 To create Postman tests for your vertical:
     1. Write a sql script to populate empty database tables with test data and save it in the testdata directory
