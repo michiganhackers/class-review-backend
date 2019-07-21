@@ -6,14 +6,18 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 const TOKENINFO_ENDPOINT string = "https://oauth2.googleapis.com/tokeninfo?id_token="
 
 // returns no error if the token is valid
 func authenticate(IDToken string) error {
-	_, retrieved := tokenCache.Get(IDToken)
+	val, retrieved := tokenCache.Get(IDToken)
+	// if the user is in the cache, they've been active in the last hour and don't need to be revalidated
 	if retrieved {
+		// refresh the token expiration time
+		tokenCache.Replace(IDToken, val, time.Hour)
 		return nil
 	}
 	resp, err := http.Get(TOKENINFO_ENDPOINT + IDToken)
@@ -41,15 +45,9 @@ func authenticate(IDToken string) error {
 	if aud != ClientId {
 		return errors.New("application client Id and aud claim " + aud + " do not match")
 	}
-
-	// TODO: Authenticate aud (make sure aud is in the app's client IDs)
-	// for reference, this is an example of an aud claim:
-	// 407408718192.apps.googleusercontent.com
-
-	// once a user is validated, return their id (contained in the sub claim), and no error
-	_, valid := token["sub"].(string)
-	if !valid {
-		return errors.New("sub claim's underlying type is not a string")
+	host, ok := token["hd"].(string)
+	if !ok || host != "umich.edu" {
+		return errors.New("invalid host -- user must be logged in with a University of Michigan email")
 	}
 	return nil
 }
