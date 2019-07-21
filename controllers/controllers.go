@@ -26,8 +26,8 @@ var tokenCache *cache.Cache
 
 func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		id_token := c.GetHeader("ID-Token")
-		_, err := authenticate(id_token)
+		IDToken := c.GetHeader("ID-Token")
+		err := authenticate(IDToken)
 		if err != nil {
 			log.Println("could not authenticate id token -- " + err.Error())
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "could not authenticate id token -- " + err.Error()})
@@ -35,8 +35,8 @@ func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 			return
 		}
 		// add token to cache, set it to expire after an hour (I'm basically just using this as a list)
-		// should I be using their id or their id_token? Does it make a difference?
-		tokenCache.Add(id_token, "dummy", time.Hour)
+		// I went with empty string rather than nil to avoid confusion b/c .Get() returns nil if it's not found
+		tokenCache.Add(IDToken, "", time.Hour)
 		c.Next()
 	}
 }
