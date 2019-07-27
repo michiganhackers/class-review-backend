@@ -8,8 +8,7 @@ import (
 )
 
 type IReviewRepository interface {
-	GetReview(uint64) (*models.Review, error)
-	TestDB()
+	GetReviewById(uint64) (*models.Review, error)
 }
 
 // Implements IReviewRepository
@@ -23,22 +22,26 @@ func DefaultReviewRepository(db *sqlx.DB) *ReviewRepository {
 	}
 }
 
-func (rr *ReviewRepository) GetReview(id uint64) (*models.Review, error) {
-
+func (rr *ReviewRepository) GetReviewById(id uint64) (*models.Review, error) {
 	var review models.Review
-	return &review, nil
-
-}
-
-func (rr *ReviewRepository) TestDB() {
-	_, err := rr.Database.Exec(`CREATE TABLE IF NOT EXISTS test(
-		name varchar(255),
-		value varchar(255)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8`)
-
+	err := rr.Database.Get(&review, `SELECT id,
+											rating, 
+											difficulty, 
+											interest, 
+											courseId, 
+											review_date, 
+											is_anonymous, 
+											review_text, 
+											professor_uniqname, 
+											helpfulCount, 
+											notHelpfulCount, 
+											semester, 
+											userEmail					
+	       							 FROM reviews WHERE id=?`, id)
 	if err != nil {
-		log.Println(err, "Could not create table")
-	} else {
-		log.Println("No error")
+		log.Println("Error in GetReviewById:", err)
+		return &review, err
 	}
+
+	return &review, nil
 }

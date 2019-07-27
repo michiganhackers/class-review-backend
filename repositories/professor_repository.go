@@ -9,7 +9,7 @@ import (
 
 type IProfessorRepository interface {
 	GetAllProfessors() ([]models.Professor, error)
-	GetProfessorByUniqname(string)(*models.Professor, error)
+	GetProfessorByUniqname(string) (*models.Professor, error)
 	PostProfessor(*models.Professor) error
 	UpdateProfessor(*models.Professor, string) (*models.Professor, error)
 	DeleteProfessor(string) error

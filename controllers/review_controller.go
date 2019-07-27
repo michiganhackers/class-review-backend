@@ -20,12 +20,12 @@ func DefaultReviewController(routes *Routes, services *services.Services) *Revie
 		Services: services,
 	}
 
-	rc.Routes.Public.GET("/review/:id", rc.getReview)
+	rc.Routes.Public.GET("/review/:id", rc.getReviewById)
 	return rc
 
 }
 
-func (rc *ReviewController) getReview(c *gin.Context) {
+func (rc *ReviewController) getReviewById(c *gin.Context) {
 	idStr := c.Param("id")
 	if idStr == "" {
 		log.Println("No id in url")
@@ -38,7 +38,7 @@ func (rc *ReviewController) getReview(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Bad id param")
 		return
 	}
-	review, err := rc.Services.ReviewService.GetReview(id)
+	review, err := rc.Services.ReviewService.GetReviewById(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, "No review with provided id")
 		return

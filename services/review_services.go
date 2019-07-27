@@ -7,7 +7,7 @@ import (
 )
 
 type IReviewService interface {
-    GetReview(uint64) (*models.Review, error)
+    GetReviewById(uint64) (*models.Review, error)
 }
 
 // Implements IReviewService
@@ -21,6 +21,6 @@ func DefaultReviewServices(repos *repositories.Repositories) *ReviewService {
     }
 }
 
-func (rs *ReviewService) GetReview(id uint64) (*models.Review, error) {
-    return rs.Repositories.ReviewRepository.GetReview(id)
+func (rs *ReviewService) GetReviewById(id uint64) (*models.Review, error) {
+    return rs.Repositories.ReviewRepository.GetReviewById(id)
 }
