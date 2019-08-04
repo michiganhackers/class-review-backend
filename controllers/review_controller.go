@@ -66,8 +66,7 @@ func (rc *ReviewController) getReviewById(c *gin.Context) {
 func (rc *ReviewController) postReview(c *gin.Context) {
 	var reviewInput models.Review
 	err := c.BindJSON(&reviewInput)
-	// TODO: Error checking for body
-	if err != nil {
+	if err != nil || !validateBody(reviewInput) {
 		log.Println("Invalid request body")
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
@@ -97,8 +96,7 @@ func (rc *ReviewController) updateReview(c *gin.Context) {
 	}
 	var reviewInput models.Review
 	err = c.BindJSON(&reviewInput)
-	// TODO: Error checking for body
-	if err != nil {
+	if err != nil || !validateBody(reviewInput) {
 		log.Println("Invalid request body")
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
@@ -134,4 +132,10 @@ func (rc *ReviewController) deleteReview(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, "OK")
 	return
+}
+
+func validateBody(body models.Review) bool{
+	return body.Rating <= 5 && body.Difficulty <= 5 && body.Interest <= 5 && ((*body.Semester)[:2] == "FA" ||
+		   (*body.Semester)[:2] == "WN" || (*body.Semester)[:2] == "SP" || (*body.Semester)[:2] == "SU" ||
+		   (*body.Semester)[:2] == "SS" )
 }

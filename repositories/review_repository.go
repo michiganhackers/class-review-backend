@@ -71,10 +71,43 @@ func (rr *ReviewRepository) GetReviewById(id uint64) (*models.Review, error) {
 }
 
 func (rr *ReviewRepository) PostReview(reviewInput *models.Review) error {
+	_, err := rr.Database.NamedExec(`INSERT INTO reviews 
+									 VALUES (DEFAULT,
+											 :rating, 
+											 :difficulty, 
+											 :interest, 
+											 :courseId, 
+											 :review_date, 
+											 :is_anonymous, 
+											 :review_text, 
+											 :professor_uniqname, 
+											 :semester, 
+											 :userEmail)`, reviewInput)
+	if err != nil {
+		log.Println("Error in PostReview:", err)
+		return err
+	}
 	return nil
 }
 
 func (rr *ReviewRepository) UpdateReview(reviewInput *models.Review, id uint64) (*models.Review, error) {
+	reviewInput.Id = id
+	_, err := rr.Database.NamedExec(`UPDATE reviews 
+									 SET rating = :rating, 
+										 difficulty = :difficulty, 
+										 interest = :interest, 
+										 courseId = :courseId, 
+										 review_date = :review_date, 
+										 is_anonymous = :is_anonymous, 
+										 review_text = :review_text, 
+										 professor_uniqname = :professor_uniqname, 
+										 semester = :semester, 
+										 userEmail = :userEmail 
+									 WHERE id = :id`, reviewInput)
+	if err != nil {
+		log.Println("Error in UpdateReview:", err)
+		return reviewInput, err
+	}
 	return reviewInput, nil
 }
 
