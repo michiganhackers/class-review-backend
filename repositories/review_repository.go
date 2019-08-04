@@ -37,8 +37,6 @@ func (rr *ReviewRepository) GetAllReviews() ([]models.Review, error) {
 												is_anonymous, 
 												review_text, 
 												professor_uniqname, 
-												helpfulCount, 
-												notHelpfulCount, 
 												semester, 
 												userEmail					
 										 FROM reviews`)
@@ -61,8 +59,6 @@ func (rr *ReviewRepository) GetReviewById(id uint64) (*models.Review, error) {
 											is_anonymous, 
 											review_text, 
 											professor_uniqname, 
-											helpfulCount, 
-											notHelpfulCount, 
 											semester, 
 											userEmail					
 	       							 FROM reviews WHERE id=?`, id)

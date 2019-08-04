@@ -16,8 +16,6 @@ type Review struct {
     Anonymous           bool      `db:"is_anonymous" json:"anonymous"`
     Text                *string   `db:"review_text" json:"text"`
     ProfessorUniqname   *string   `db:"professor_uniqname" json:"professorUniqname"`
-    HelpfulCount        uint64    `db:"helpfulCount" json:"helpfulCount"`
-    NotHelpfulCount     uint64    `db:"notHelpfulCount" json:"notHelpfulCount"`
     Semester            *string   `db:"semester" json:"semester"`
     UserEmail           *string   `db:"userEmail" json:"userEmail"`
 }

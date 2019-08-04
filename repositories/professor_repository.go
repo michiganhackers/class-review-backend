@@ -113,9 +113,7 @@ func (pr *ProfessorRepository) GetProfessorStatsByUniqname(uniqname string) (*mo
 	err := pr.Database.Get(&professorStats, `SELECT professor_uniqname, 
 													AVG(rating), 
 													AVG(difficulty), 
-													AVG(interest), 
-													SUM(helpfulCount), 
-													SUM(notHelpfulCount)
+													AVG(interest)
 											 FROM reviews WHERE professor_uniqname=?`, uniqname)
 	if err != nil {
 		log.Println("Error in GetProfessorStatsByName:", err)
