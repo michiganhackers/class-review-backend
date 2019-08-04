@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"class-review-backend/env"
+	"class-review-backend/repositories"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
@@ -47,4 +48,8 @@ func authenticate(IDToken string) error {
 		return errors.New("invalid host -- user must be logged in with a University of Michigan email")
 	}
 	return nil
+}
+
+func doesIDMatch(resourceId int64, userId string, targetTable string, targetIdField string, repos *repositories.Repositories) bool {
+
 }
