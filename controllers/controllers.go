@@ -6,9 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/patrickmn/go-cache"
-
 	"github.com/gin-gonic/gin"
+	"github.com/patrickmn/go-cache"
 )
 
 type Controllers struct {
@@ -27,9 +26,10 @@ var tokenCache *cache.Cache
 func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		endpointPath := c.FullPath()
+		endpointVerb := c.GetHeader("method")
 		IDToken := c.GetHeader("ID-Token")
 		// TODO: How are we going to get a user's uniqname given their ID token?
-		err := authenticate(IDToken)
+		uniqname, err := authenticate(IDToken)
 		// authenticate user
 		if err != nil {
 			log.Println("could not authenticate id token -- " + err.Error())

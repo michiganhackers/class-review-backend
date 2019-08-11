@@ -1,3 +1,4 @@
+// don't think we'll need this file
 package repositories
 
 import (
@@ -22,8 +23,8 @@ func DefaultAdminRepository(db *sqlx.DB) *AdminRepository {
 	}
 }
 
-func (ar *AdminRepository) PostAdmin(uniqname string) error {
-	_, err := ar.Database.Exec(`INSERT INTO admins=?`, uniqname)
+func (ar *AdminRepository) PostAdmin(hashed_uniqname string) error {
+	_, err := ar.Database.Exec(`INSERT INTO admins=?`, hashed_uniqname)
 	if err != nil {
 		log.Println("Error in PostAdmin: ", err)
 		return err
@@ -31,8 +32,8 @@ func (ar *AdminRepository) PostAdmin(uniqname string) error {
 	return nil
 }
 
-func (ar *AdminRepository) IsAdmin(uniqname string) bool {
-	_, err := ar.Database.Exec(`SELECT admin_uniqname from admins WHERE admin_uniqname=?`, uniqname)
+func (ar *AdminRepository) IsAdmin(hashed_uniqname string) bool {
+	_, err := ar.Database.Exec(`SELECT admin_uniqname from admins WHERE admin_uniqname=?`, hashed_uniqname)
 	if err == nil {
 		return true
 	}
