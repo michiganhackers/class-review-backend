@@ -8,6 +8,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type ReviewController struct {
@@ -71,6 +73,13 @@ func (rc *ReviewController) postReview(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
 	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(reviewInput.UserEmail), 12)
+	if err != nil {
+		log.Println("POST request failed")
+		c.JSON(http.StatusNotFound, "POST request failed")
+		return
+	}
+	reviewInput.UserEmail = string(hash)
 	err = rc.Services.ReviewService.PostReview(&reviewInput)
 	if err != nil {
 		log.Println("POST request failed")
@@ -101,6 +110,13 @@ func (rc *ReviewController) updateReview(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
 	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(reviewInput.UserEmail), 12)
+	if err != nil {
+		log.Println("PUT request failed")
+		c.JSON(http.StatusNotFound, "PUT request failed")
+		return
+	}
+	reviewInput.UserEmail = string(hash)
 	review, err := rc.Services.ReviewService.UpdateReview(&reviewInput, id)
 	if err != nil {
 		log.Println("PUT request failed")
