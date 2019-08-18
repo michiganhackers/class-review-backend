@@ -13,9 +13,8 @@ type Review struct {
     Interest            uint8     `db:"interest" json:"interest"`
     CourseId            uint64    `db:"courseId" json:"courseId"`
     Date                time.Time `db:"review_date" json:"date"`
-    Anonymous           bool      `db:"is_anonymous" json:"anonymous"`
     Text                *string   `db:"review_text" json:"text"`
     ProfessorUniqname   *string   `db:"professor_uniqname" json:"professorUniqname"`
     Semester            *string   `db:"semester" json:"semester"`
-    UserEmail           *string   `db:"userEmail" json:"userEmail"`
+    UserEmail           string    `db:"userEmail" json:"userEmail"`
 }

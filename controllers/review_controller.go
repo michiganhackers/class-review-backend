@@ -66,7 +66,7 @@ func (rc *ReviewController) getReviewById(c *gin.Context) {
 func (rc *ReviewController) postReview(c *gin.Context) {
 	var reviewInput models.Review
 	err := c.BindJSON(&reviewInput)
-	if err != nil || !validateBody(reviewInput) {
+	if err != nil || !bodyIsValid(&reviewInput) {
 		log.Println("Invalid request body")
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
@@ -96,7 +96,7 @@ func (rc *ReviewController) updateReview(c *gin.Context) {
 	}
 	var reviewInput models.Review
 	err = c.BindJSON(&reviewInput)
-	if err != nil || !validateBody(reviewInput) {
+	if err != nil || !bodyIsValid(&reviewInput) {
 		log.Println("Invalid request body")
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
@@ -134,8 +134,16 @@ func (rc *ReviewController) deleteReview(c *gin.Context) {
 	return
 }
 
-func validateBody(body models.Review) bool{
-	return body.Rating <= 5 && body.Difficulty <= 5 && body.Interest <= 5 && ((*body.Semester)[:2] == "FA" ||
-		   (*body.Semester)[:2] == "WN" || (*body.Semester)[:2] == "SP" || (*body.Semester)[:2] == "SU" ||
-		   (*body.Semester)[:2] == "SS" )
+func bodyIsValid(body *models.Review) bool {
+	if body.Rating > 5 || body.Difficulty > 5 || body.Interest > 5 {
+		return false
+	} else if body.UserEmail == "" {
+		return false
+	} else if body.Semester != nil &&
+			  (len(*body.Semester) < 6 || ((*body.Semester)[:2] != "FA" && (*body.Semester)[:2] != "WN" &&
+			  (*body.Semester)[:2] != "SP" && (*body.Semester)[:2] != "SU" && (*body.Semester)[:2] != "SS")) {
+		return false
+	}
+
+	return true
 }
