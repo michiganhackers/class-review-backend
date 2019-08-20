@@ -12,6 +12,8 @@ type IReviewService interface {
     PostReview(*models.Review) error
     UpdateReview(*models.Review, uint64) (*models.Review, error)
     DeleteReview(uint64) error
+    GetRatingByReviewId(uint64) (*models.RatingCount, error)
+    UpdateRating(*models.UserRating) (*models.UserRating, error)
 }
 
 // Implements IReviewService
@@ -43,4 +45,12 @@ func (rs *ReviewService) UpdateReview(reviewInput *models.Review, id uint64) (*m
 
 func (rs *ReviewService) DeleteReview(id uint64) error {
     return rs.Repositories.ReviewRepository.DeleteReview(id)
+}
+
+func (rs *ReviewService) GetRatingByReviewId(reviewId uint64) (*models.RatingCount, error) {
+    return rs.Repositories.ReviewRepository.GetRatingByReviewId(reviewId)
+}
+
+func (rs *ReviewService) UpdateRating(ratingInput *models.UserRating) (*models.UserRating, error) {
+    return rs.Repositories.ReviewRepository.UpdateRating(ratingInput)
 }

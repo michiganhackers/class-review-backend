@@ -13,6 +13,8 @@ type IReviewRepository interface {
 	PostReview(*models.Review) error
 	UpdateReview(*models.Review, uint64) (*models.Review, error)
 	DeleteReview(uint64) error
+	GetRatingByReviewId(uint64) (*models.RatingCount, error)
+	UpdateRating(*models.UserRating) (*models.UserRating, error)
 }
 
 // Implements IReviewRepository
@@ -115,4 +117,10 @@ func (rr *ReviewRepository) DeleteReview(id uint64) error {
 	}
 
 	return nil
+}
+
+func (rr *ReviewRepository) GetRatingByReviewId(reviewId uint64) (*models.RatingCount, error) {
+}
+
+func (rr *ReviewRepository) UpdateRating(ratingInput *models.UserRating) (*models.UserRating, error) {
 }

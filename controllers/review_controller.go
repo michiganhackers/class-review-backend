@@ -4,6 +4,7 @@ import (
 	"class-review-backend/models"
 	"class-review-backend/services"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 
@@ -28,6 +29,8 @@ func DefaultReviewController(routes *Routes, services *services.Services) *Revie
 	rc.Routes.Private.POST("/review", rc.postReview)
 	rc.Routes.Private.PUT("/review/:id", rc.updateReview)
 	rc.Routes.Private.DELETE("/review/:id", rc.deleteReview)
+	rc.Routes.Public.GET("/rating/:reviewId", rc.getRatingByReviewId)
+	rc.Routes.Private.PUT("/rating", rc.updateRating)
 	return rc
 
 }
@@ -68,7 +71,7 @@ func (rc *ReviewController) getReviewById(c *gin.Context) {
 func (rc *ReviewController) postReview(c *gin.Context) {
 	var reviewInput models.Review
 	err := c.BindJSON(&reviewInput)
-	if err != nil || !bodyIsValid(&reviewInput) {
+	if err != nil || !reviewBodyIsValid(&reviewInput) {
 		log.Println("Invalid request body")
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
@@ -105,7 +108,7 @@ func (rc *ReviewController) updateReview(c *gin.Context) {
 	}
 	var reviewInput models.Review
 	err = c.BindJSON(&reviewInput)
-	if err != nil || !bodyIsValid(&reviewInput) {
+	if err != nil || !reviewBodyIsValid(&reviewInput) {
 		log.Println("Invalid request body")
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
@@ -150,7 +153,54 @@ func (rc *ReviewController) deleteReview(c *gin.Context) {
 	return
 }
 
-func bodyIsValid(body *models.Review) bool {
+func (rc *ReviewController) getRatingByReviewId(c *gin.Context) {
+	reviewIdStr := c.Param("reviewId")
+	if reviewIdStr == "" {
+		log.Println("No review id in url")
+		c.JSON(http.StatusBadRequest, "No review id in url")
+		return
+	}
+	reviewId, err := strconv.ParseUint(reviewIdStr, 10, 64)
+	if err != nil {
+		log.Println("Bad review id param")
+		c.JSON(http.StatusBadRequest, "Bad review id param")
+		return
+	}
+	rating, err := rc.Services.ReviewService.GetRatingByReviewId(reviewId)
+	if err != nil {
+		c.JSON(http.StatusNotFound, "No rating with provided review id")
+		return
+	}
+	c.JSON(http.StatusOK, rating)
+	return
+}
+
+func (rc *ReviewController) updateRating(c *gin.Context) {
+	var ratingInput models.UserRating
+	err := c.BindJSON(&ratingInput)
+	if err != nil || math.Abs(float64(ratingInput.Helpful)) != 1 {
+		log.Println("Invalid request body")
+		c.JSON(http.StatusBadRequest, "Invalid request body")
+		return
+	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(ratingInput.UserEmail), 12)
+	if err != nil {
+		log.Println("PUT request failed")
+		c.JSON(http.StatusNotFound, "PUT request failed")
+		return
+	}
+	ratingInput.UserEmail = string(hash)
+	rating, err := rc.Services.ReviewService.UpdateRating(&ratingInput)
+	if err != nil {
+		log.Println("PUT request failed")
+		c.JSON(http.StatusNotFound, "PUT request failed")
+		return
+	}
+	c.JSON(http.StatusOK, rating)
+	return
+}
+
+func reviewBodyIsValid(body *models.Review) bool {
 	if body.Rating > 5 || body.Difficulty > 5 || body.Interest > 5 {
 		return false
 	} else if body.UserEmail == "" {

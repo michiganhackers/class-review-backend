@@ -18,3 +18,15 @@ type Review struct {
     Semester            *string   `db:"semester" json:"semester"`
     UserEmail           string    `db:"userEmail" json:"userEmail"`
 }
+
+type RatingCount struct {
+    ReviewId        uint64
+    HelpfulCount    uint64
+    NotHelpfulCount uint64
+}
+
+type UserRating struct {
+    UserEmail   string `db:"userEmail"`
+    ReviewId    uint64 `db:"reviewId"`
+    Helpful     int8   `db:"helpful"`
+}
