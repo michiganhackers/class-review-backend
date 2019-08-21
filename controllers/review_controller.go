@@ -4,7 +4,6 @@ import (
 	"class-review-backend/models"
 	"class-review-backend/services"
 	"log"
-	"math"
 	"net/http"
 	"strconv"
 
@@ -178,18 +177,11 @@ func (rc *ReviewController) getRatingByReviewId(c *gin.Context) {
 func (rc *ReviewController) updateRating(c *gin.Context) {
 	var ratingInput models.UserRating
 	err := c.BindJSON(&ratingInput)
-	if err != nil || math.Abs(float64(ratingInput.Helpful)) != 1 {
+	if err != nil || ratingInput.UserEmail == "" || ratingInput.ReviewId == 0 {
 		log.Println("Invalid request body")
 		c.JSON(http.StatusBadRequest, "Invalid request body")
 		return
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(ratingInput.UserEmail), 12)
-	if err != nil {
-		log.Println("PUT request failed")
-		c.JSON(http.StatusNotFound, "PUT request failed")
-		return
-	}
-	ratingInput.UserEmail = string(hash)
 	rating, err := rc.Services.ReviewService.UpdateRating(&ratingInput)
 	if err != nil {
 		log.Println("PUT request failed")

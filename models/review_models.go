@@ -28,5 +28,5 @@ type RatingCount struct {
 type UserRating struct {
     UserEmail   string `db:"userEmail" json:"userEmail"`
     ReviewId    uint64 `db:"reviewId" json:"reviewId"`
-    Helpful     int8   `db:"helpful" json:"helpful"`
+    Helpful     bool   `db:"helpful" json:"helpful"`
 }
