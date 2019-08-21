@@ -120,7 +120,32 @@ func (rr *ReviewRepository) DeleteReview(id uint64) error {
 }
 
 func (rr *ReviewRepository) GetRatingByReviewId(reviewId uint64) (*models.RatingCount, error) {
+	var rating models.RatingCount
+	err := rr.Database.Get(&rating, `SELECT reviewId,
+       								 		SUM(CASE WHEN helpful > 0 THEN 1 ELSE 0 END) AS helpfulCount,
+       								 		SUM(CASE WHEN helpful < 0 THEN 1 ELSE 0 END) AS notHelpfulCount
+									 FROM ratings WHERE reviewId = ?`, reviewId)
+	if err != nil {
+		log.Println("Error in GetRatingByReviewId:", err)
+		return &rating, err
+	}
+
+	return &rating, nil
 }
 
 func (rr *ReviewRepository) UpdateRating(ratingInput *models.UserRating) (*models.UserRating, error) {
+	// This is done because two equivalent hashed and salted emails may differ, so we compare them with bcrypt's
+	//	function instead of a WHERE clause in sql
+	var ratings []models.UserRating
+	var rating models.UserRating
+	err := rr.Database.Select(&ratings, `SELECT userEmail,
+											    reviewId, 
+											    helpful 
+	       							 	 FROM ratings WHERE reviewId = ?`, ratingInput.ReviewId)
+	if err != nil {
+		log.Println("Error in UpdateRating:", err)
+		return &rating, err
+	}
+
+	return &rating, nil
 }

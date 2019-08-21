@@ -20,13 +20,13 @@ type Review struct {
 }
 
 type RatingCount struct {
-    ReviewId        uint64
-    HelpfulCount    uint64
-    NotHelpfulCount uint64
+    ReviewId        uint64 `db:"reviewId" json:"reviewId"`
+    HelpfulCount    uint64 `db:"helpfulCount" json:"helpfulCount"`
+    NotHelpfulCount uint64 `db:"notHelpfulCount" json:"notHelpfulCount"`
 }
 
 type UserRating struct {
-    UserEmail   string `db:"userEmail"`
-    ReviewId    uint64 `db:"reviewId"`
-    Helpful     int8   `db:"helpful"`
+    UserEmail   string `db:"userEmail" json:"userEmail"`
+    ReviewId    uint64 `db:"reviewId" json:"reviewId"`
+    Helpful     int8   `db:"helpful" json:"helpful"`
 }
