@@ -13,3 +13,8 @@ var permissions = map[string]string{
 	"GET /professor/stats":           ANY,
 	"GET /professor/stats/:uniqname": ANY,
 }
+
+// making this a map for future generalization
+var ownerKeys = map[string]string{
+	"reviews": "uniqname",
+}

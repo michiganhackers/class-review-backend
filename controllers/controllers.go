@@ -4,6 +4,7 @@ import (
 	"class-review-backend/services"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -44,7 +45,8 @@ func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 	}
 }
 
-func PermissionRequired(c *gin.Context, db *sqlx.DB) gin.HandlerFunc {
+// is this how I should pass in and use the database?
+func PermissionRequired(db *sqlx.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		IDToken := c.GetHeader("ID-Token")
 		uniqname, err := authenticate(IDToken)
@@ -53,11 +55,20 @@ func PermissionRequired(c *gin.Context, db *sqlx.DB) gin.HandlerFunc {
 		verb := c.GetHeader("method")
 		permission := permissions[verb+" "+path]
 
+		resourceId, err := strconv.ParseInt(c.GetHeader("resourceId"), 10, 64)
+		if err != nil {
+			log.Println(err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error:": err.Error()})
+			c.Abort()
+			return
+		}
+
 		if permission == OWN {
 			firstElementInPath := strings.Split(path, "/")[0]
 			// make plural
 			targetTable := firstElementInPath + "s"
-			if !(isAdmin(uniqname, db) || doesIdMatch(resourceId, uniqname, targetTable, "uniqname", db)) {
+			targetColumn := ownerKeys[firstElementInPath]
+			if !(isAdmin(uniqname, db) || doesIdMatch(resourceId, uniqname, targetTable, targetColumn, db)) {
 				log.Println("user doens't have permission to access " + verb + " " + path)
 				c.JSON(http.StatusUnauthorized, gin.H{"error": "user doens't have permission to access " + verb + " " + path})
 				return
@@ -77,8 +88,8 @@ func DefaultControllers(r *gin.Engine, services *services.Services) *Controllers
 
 	routes.Private.Use(AuthenticationRequired())
 
-	// does this make sense? If not, how should I access the tables?
-	routes.Private.Use(PermissionRequired(DefaultRepositories()))
+	// what do I put in the function call to be able to access the tables?
+	routes.Private.Use(PermissionRequired())
 
 	controllers := &Controllers{
 		ProfessorController: DefaultProfessorController(routes, services),
