@@ -59,9 +59,9 @@ func authenticate(IDToken string) (string, error) {
 	return uniqname, nil
 }
 
-func doesIDMatch(resourceId int64, userId string, targetTable string, targetIdField string, db *sqlx.DB) bool {
+func doesIdMatch(resourceId int64, uniqname string, targetTable string, targetIdField string, db *sqlx.DB) bool {
 	var id int64
-	rows, err := db.Query("SELECT id FROM ? WHERE ? = ?", targetTable, targetIdField, userId)
+	rows, err := db.Query("SELECT id FROM ? WHERE ? = ?", targetTable, targetIdField, uniqname)
 	if err != nil {
 		log.Println(err.Error())
 		return false
