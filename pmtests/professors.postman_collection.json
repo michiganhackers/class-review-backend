@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1ecf01ed-373a-4a63-80fb-eed7c32c28aa",
+		"_postman_id": "f55e4cc8-bfe1-4145-ad20-b2d1dadc6a8c",
 		"name": "professors",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -333,15 +333,11 @@
 							"    pm.expect(jsonData[0].avgRating).to.eql(5);",
 							"    pm.expect(jsonData[0].avgDifficulty).to.eql(5);",
 							"    pm.expect(jsonData[0].avgInterest).to.eql(5);",
-							"    pm.expect(jsonData[0].totalHelpfulCount).to.eql(15);",
-							"    pm.expect(jsonData[0].totalNotHelpfulCount).to.eql(15);",
 							"    ",
 							"    pm.expect(jsonData[1].uniqname).to.eql('2');",
 							"    pm.expect(jsonData[1].avgRating).to.eql(2);",
 							"    pm.expect(jsonData[1].avgDifficulty).to.eql(2);",
 							"    pm.expect(jsonData[1].avgInterest).to.eql(2);",
-							"    pm.expect(jsonData[1].totalHelpfulCount).to.eql(2);",
-							"    pm.expect(jsonData[1].totalNotHelpfulCount).to.eql(2);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -387,8 +383,6 @@
 							"    pm.expect(jsonData.avgRating).to.eql(5);",
 							"    pm.expect(jsonData.avgDifficulty).to.eql(5);",
 							"    pm.expect(jsonData.avgInterest).to.eql(5);",
-							"    pm.expect(jsonData.totalHelpfulCount).to.eql(15);",
-							"    pm.expect(jsonData.totalNotHelpfulCount).to.eql(15);",
 							"});"
 						],
 						"type": "text/javascript"

@@ -9,7 +9,7 @@ import (
 )
 
 func CreateDB() *sqlx.DB {
-	connection := env.Variables.DBUser + ":" + env.Variables.DBPassword + "@tcp(" + env.Variables.DBServer + ":" + env.Variables.DBPort + ")/" + env.Variables.DBName
+	connection := env.Variables.DBUser + ":" + env.Variables.DBPassword + "@tcp(" + env.Variables.DBServer + ":" + env.Variables.DBPort + ")/" + env.Variables.DBName + "?parseTime=true"
 	db, err := sql.Open("mysql", connection)
 	if err != nil {
 		log.Println("Failed to open database: ", err.Error())

@@ -9,7 +9,7 @@ import (
 
 type IProfessorRepository interface {
 	GetAllProfessors() ([]models.Professor, error)
-	GetProfessorByUniqname(string)(*models.Professor, error)
+	GetProfessorByUniqname(string) (*models.Professor, error)
 	PostProfessor(*models.Professor) error
 	UpdateProfessor(*models.Professor, string) (*models.Professor, error)
 	DeleteProfessor(string) error
@@ -113,9 +113,7 @@ func (pr *ProfessorRepository) GetProfessorStatsByUniqname(uniqname string) (*mo
 	err := pr.Database.Get(&professorStats, `SELECT professor_uniqname, 
 													AVG(rating), 
 													AVG(difficulty), 
-													AVG(interest), 
-													SUM(helpfulCount), 
-													SUM(notHelpfulCount)
+													AVG(interest)
 											 FROM reviews WHERE professor_uniqname=?`, uniqname)
 	if err != nil {
 		log.Println("Error in GetProfessorStatsByName:", err)
