@@ -78,7 +78,7 @@ func (rc *ReviewController) postReview(c *gin.Context) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(reviewInput.UserEmail), 12)
 	if err != nil {
 		log.Println("POST request failed")
-		c.JSON(http.StatusNotFound, "POST request failed")
+		c.JSON(http.StatusInternalServerError, "POST request failed")
 		return
 	}
 	reviewInput.UserEmail = string(hash)
@@ -115,7 +115,7 @@ func (rc *ReviewController) updateReview(c *gin.Context) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(reviewInput.UserEmail), 12)
 	if err != nil {
 		log.Println("PUT request failed")
-		c.JSON(http.StatusNotFound, "PUT request failed")
+		c.JSON(http.StatusInternalServerError, "PUT request failed")
 		return
 	}
 	reviewInput.UserEmail = string(hash)
