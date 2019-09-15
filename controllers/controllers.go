@@ -45,6 +45,21 @@ func AuthenticationRequired(auths ...string) gin.HandlerFunc {
 	}
 }
 
+func AdminRequired(adminTable *sqlx.DB, auths ...string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		IDToken := c.GetHeader("ID-Token")
+		uniqname, err := authenticate(IDToken)
+		if err != nil || !isAdmin(uniqname, adminTable) {
+			log.Println("could not authenticate id token -- " + err.Error())
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "could not authenticate id token -- " + err.Error()})
+			c.Abort()
+			return
+		}
+		tokenCache.Add(IDToken, "", 30*time.Minute)
+		c.Next()
+	}
+}
+
 // is this how I should pass in and use the database?
 func PermissionRequired(db *sqlx.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
